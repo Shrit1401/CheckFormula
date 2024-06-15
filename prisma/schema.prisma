@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Subject {
+  id       Int       @id @default(autoincrement())
+  name     String
+  chapters Chapter[]
+}
+
+model Chapter {
+  id         Int       @id @default(autoincrement())
+  name       String
+  subject    Subject   @relation(fields: [subjectId], references: [id])
+  subjectId  Int
+  formulas   Formula[] @relation("ChapterFormula")
+  comingSoon Boolean   @default(false)
+}
+
+model Formula {
+  id           Int      @id @default(autoincrement())
+  latex        String
+  wrongAnswers String[]
+  chapterId    Int
+  Chapter      Chapter  @relation(name: "ChapterFormula", fields: [chapterId], references: [id])
+}
