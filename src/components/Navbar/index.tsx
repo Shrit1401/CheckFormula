@@ -3,8 +3,13 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Logo from "../../../public/logo.svg";
 import Image from "next/image";
+import { UserButton, useUser } from "@clerk/nextjs";
 const Navbar = () => {
+  const user = useUser();
   const [isOpen, setIsOpen] = useState(false);
+  const [subjects, setSubjects] = useState(
+    [] as { id: string; name: string }[] | undefined
+  );
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -12,10 +17,17 @@ const Navbar = () => {
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/math", label: "Maths" },
-    { href: "/physics", label: "Physics" },
-    { href: "/chemistry", label: "Chemistry" },
+    { href: "/subjects", label: "Subjects" },
+    { href: "/sign-up", label: "Sign Up" },
   ];
+
+  const userButtonAppearance = {
+    elements: {
+      userButtonAvatarBox: "w-10 h-10", // Custom width and height
+      userButtonPopoverCard: "bg-blue-100", // Custom background for the popover card
+      userButtonPopoverActionButton: "text-red-600", // Custom text color for action buttons
+    },
+  };
 
   return (
     <nav className="bg-transparent border-b border-gray-200">
@@ -64,9 +76,13 @@ const Navbar = () => {
               </li>
             ))}
             <li className="flex flex-row">
-              <Link href="/sign-up">
-                <button className="btn btn-primary">Sign in / up</button>
-              </Link>
+              {user.isSignedIn ? (
+                <UserButton appearance={userButtonAppearance} />
+              ) : (
+                <Link href="/sign-up">
+                  <button className="btn btn-primary">Sign in / up</button>
+                </Link>
+              )}
             </li>
           </ul>
         </div>

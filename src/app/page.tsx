@@ -1,13 +1,12 @@
-"use client";
-import Editor from "@/components/global/Editor";
-
-import { useState } from "react";
+import Viewer from "@/components/global/Viewer";
 
 export default function Home() {
-  const [state, setState] = useState("");
   return (
     <main>
-      <Editor latex={state} setLatex={setState} />
+      <h1 className="text-4xl font-bold capitalize text-center my-10">
+        All Your Formulas at one place
+      </h1>
+      <Viewer />
     </main>
   );
 }

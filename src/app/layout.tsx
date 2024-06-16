@@ -3,6 +3,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "react-hot-toast";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const dm_sans = DM_Sans({
   weight: ["100", "200", "300", "400", "500", "700", "800", "900", "1000"],
@@ -22,19 +23,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={dm_sans.className}>
-        <link
-          rel="icon"
-          href="images/favicon.ico"
-          type="image/x-icon"
-          sizes="48x48"
-        />
-
-        <Navbar />
-        {children}
-        <Toaster />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <head>
+          <link
+            rel="icon"
+            href="./favicon.ico"
+            type="image/x-icon"
+            sizes="48x48"
+          />
+        </head>
+        <body className={dm_sans.className}>
+          <Navbar />
+          {children}
+          <Toaster />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
