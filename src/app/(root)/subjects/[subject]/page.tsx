@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { getSubject } from "@/lib/queries";
 import { SubjectType } from "@/lib/types";
@@ -40,12 +40,10 @@ const SubjectPage = () => {
     );
   }
 
-  if (!subjectData) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <span className="text-xl">Subject not found</span>
-      </div>
-    );
+  if (!subjectData?.chapters) {
+    const router = useRouter();
+    router.push("/");
+    return null;
   }
 
   return (

@@ -26,6 +26,7 @@ const Viewer = ({ latex = "" }: ViewerProps) => {
           outline: "none",
           padding: "0",
           backgroundColor: "transparent",
+          fontSize: "1.5rem",
         }}
       >
         {latex}

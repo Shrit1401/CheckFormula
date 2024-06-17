@@ -1,7 +1,10 @@
-import { getAllFormulasFromChapters } from "@/lib/queries";
+// ChapterList.tsx
+
 import React, { useEffect, useState } from "react";
-import Viewer from "../global/Viewer";
-import { handleError } from "@/lib/utils";
+import { getAllFormulasFromChapters } from "@/lib/queries"; // Adjust path as per your project structure
+import { handleError } from "@/lib/utils"; // Adjust path as per your project structure
+import FormulaModal from "./FormulaModal"; // Assuming you have a modal component for formulas
+import toast from "react-hot-toast";
 
 type ChapterListProps = {
   chapters: { id: string; name: string; comingSoon?: boolean }[] | undefined;
@@ -20,6 +23,10 @@ const ChapterList: React.FC<ChapterListProps> = ({ chapters }) => {
   >({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedFormulas, setSelectedFormulas] = useState<
+    Formula[] | undefined
+  >(undefined);
 
   useEffect(() => {
     const fetchFormulas = async () => {
@@ -32,17 +39,18 @@ const ChapterList: React.FC<ChapterListProps> = ({ chapters }) => {
           const formulasByChapter: Record<string, Formula[]> = {};
 
           formulas!.forEach((formula) => {
-            if (!formulasByChapter[formula.chapterId.toString()]) {
-              formulasByChapter[formula.chapterId.toString()] = [];
+            const chapterIdStr = formula.chapterId.toString();
+            if (!formulasByChapter[chapterIdStr]) {
+              formulasByChapter[chapterIdStr] = [];
             }
-            formulasByChapter[formula.chapterId.toString()].push(formula);
+            formulasByChapter[chapterIdStr].push(formula);
           });
 
           setChapterFormulas(formulasByChapter);
         } catch (err) {
           setError("Failed to load formulas");
           console.error(err);
-          handleError(err); // Assuming handleError is a function to log or handle errors
+          handleError(err);
         } finally {
           setLoading(false);
         }
@@ -51,6 +59,22 @@ const ChapterList: React.FC<ChapterListProps> = ({ chapters }) => {
 
     fetchFormulas();
   }, [chapters]);
+
+  const handleShowFormulas = (
+    formulas: Formula[] | undefined,
+    comingSoon: boolean
+  ) => {
+    if (comingSoon) {
+      toast.error("Formulas for this chapter are coming soon!");
+      return;
+    }
+    setSelectedFormulas(formulas);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   if (loading) {
     return (
@@ -82,12 +106,27 @@ const ChapterList: React.FC<ChapterListProps> = ({ chapters }) => {
               </div>
               <div className="flex justify-start mt-4">
                 <button className="btn btn-accent mr-2">Take Quiz</button>
-                <button className="btn btn-outline">Show Formulas</button>
+                <button
+                  onClick={() =>
+                    handleShowFormulas(
+                      chapterFormulas[chapter.id],
+                      chapter.comingSoon!
+                    )
+                  }
+                  className="btn btn-outline"
+                >
+                  Show Formulas
+                </button>
               </div>
             </div>
           </div>
         </div>
       ))}
+
+      {/* Modal */}
+      {showModal && (
+        <FormulaModal formulas={selectedFormulas} onClose={handleCloseModal} />
+      )}
     </div>
   );
 };

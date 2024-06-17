@@ -16,3 +16,8 @@ export type ChapterType = {
   name: string;
   comingSoon?: true;
 };
+
+export interface Subject {
+  name: string;
+  chapters: string[];
+}
