@@ -8,13 +8,14 @@ export type SubjectType = {
   id: string;
   name: string;
   chaptersLength?: number;
-  chapters?: { id: string; name: string; comingSoon?: true }[];
+  chapters: ChapterType[];
 };
 
 export type ChapterType = {
   id: string;
   name: string;
-  comingSoon?: true;
+  comingSoon?: boolean | true;
+  formulas?: FormulaType[];
 };
 
 export interface Subject {

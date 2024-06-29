@@ -2,29 +2,22 @@
 import ChooseSubject from "@/components/Quiz/ChooseSubject";
 import QuizHeader from "@/components/Quiz/QuizHeader";
 import { Subject } from "@/lib/types";
-import React, { useState } from "react";
-
-const subjects: Subject[] = [
-  {
-    name: "Mathematics",
-    chapters: ["Algebra", "Calculus"],
-  },
-  {
-    name: "Physics",
-    chapters: ["Kinematics", "Dynamics"],
-  },
-  {
-    name: "Chemistry",
-    chapters: ["Chemical Reactions", "Thermodynamics"],
-  },
-];
+import React, { useEffect, useState } from "react";
 
 const QuizPage = () => {
+  const [subjects, setSubjects] = useState<Subject[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedChapters, setSelectedChapters] = useState<
     Record<string, string[]>
   >({});
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const fetchSubjects = async () => {};
+    fetchSubjects();
+  }, []);
+
+  console.log("subjects", subjects);
 
   return (
     <main>

@@ -1,7 +1,7 @@
 "use server";
 import prisma from "@/lib/db";
 import { unstable_noStore as noStore } from "next/cache";
-import { FormulaType, SubjectType } from "./types";
+import { SubjectType, ChapterType, FormulaType } from "@/lib/types";
 import { handleError } from "./utils";
 
 export const getAllSubjects = async () => {

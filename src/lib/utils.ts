@@ -6,4 +6,5 @@ export const handleError = async (err: any) => {
     err.message || String(err) || "An unexpected error occurred";
 
   toast.error(errorMessage);
+  throw new Error(errorMessage);
 };
